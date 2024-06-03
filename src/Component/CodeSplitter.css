@@ -179,12 +179,21 @@ button:disabled {
 /*-----*/
 
 /* Footer buttons */
+
+.footer-buttons-container {
+  position: -webkit-sticky; /* For Safari */
+  width: 100%;
+  position: sticky;
+  bottom: 0;
+  padding-top: 1px;
+  display: flex;
+  background-color: #0d131e;
+  justify-content: center;
+}
+
 .footer-buttons {
   display: flex;
   margin: 15px 0 0 0;
-  position: -webkit-sticky; /* For Safari */
-  position: sticky;
-  bottom: 0;
   background-color: #384a5f; /* Optional: to ensure it's visible */
   z-index: 1000; /* Optional: to ensure it appears above other content */
   padding: 10px; /* Optional: some padding for better appearance */
@@ -194,11 +203,9 @@ button:disabled {
 
 .split-text-buttons {
   display: flex;
-  margin: 10px 0;
-  background-color: #384a5f; /* Optional: to ensure it's visible */
+
   z-index: 1000; /* Optional: to ensure it appears above other content */
   padding: 10px; /* Optional: some padding for better appearance */
-  border: 1px solid #ced4da;
   border-radius: 5px;
   width: max-content;
 }
@@ -206,6 +213,9 @@ button:disabled {
 .split-text-buttons-outer {
   justify-content: center;
   display: flex;
+  border: 1px solid #ced4da;
+  background-color: #384a5f;
+  margin: 10px 0;
 }
 
 .Configuration {
@@ -276,7 +286,7 @@ button.copied {
 
 .ToggleCopyDownload {
   display: flex;
-  margin: 10px 0;
+  margin: 10px 0 20px 0;
   background-color: #384a5f;
   z-index: 1000;
   padding: 10px;
@@ -372,4 +382,11 @@ input::-webkit-inner-spin-button {
 .scroll-to-top:active {
   background-color: #384a5f;
   transform: scale(0.9);
+}
+
+button {
+  -webkit-user-select: none; /* Disable text selection for Safari */
+  -moz-user-select: none; /* Disable text selection for Firefox */
+  -ms-user-select: none; /* Disable text selection for Internet Explorer/Edge */
+  user-select: none; /* Disable text selection */
 }

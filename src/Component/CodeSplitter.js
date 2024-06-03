@@ -10,6 +10,7 @@ import {
   faCheck,
   faTimes,
   faArrowUp,
+  faFileUpload,
 } from "@fortawesome/free-solid-svg-icons";
 
 const CodeSplitter = () => {
@@ -19,10 +20,9 @@ const CodeSplitter = () => {
   const [copyStatus, setCopyStatus] = useState("");
   const [splitByWords, setSplitByWords] = useState(false);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
-  const [currentChunkData, setCurrentChunkData] = useState(0);
   const [customDelimiter, setCustomDelimiter] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [highlightedChunks, setHighlightedChunks] = useState([]);
+  const [highlightedChunks, setHighlightedChunks] = useState([0]);
   const [view, setView] = useState("list");
   const [showContent, setShowContent] = useState(false);
   const [selectedOption, setSelectedOption] = useState("option1");
@@ -52,9 +52,6 @@ const CodeSplitter = () => {
       });
     }
   }, [currentChunkIndex]);
-
-  console.log("currentChunkIndex", currentChunkIndex);
-
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
@@ -176,8 +173,7 @@ const CodeSplitter = () => {
       });
   };
 
-  const handleCopyChunk = () => {
-    const { chunk, index, totalChunks } = currentChunkData;
+  const handleCopyChunk = (chunk, index, totalChunks) => {
     const partNumber = index + 1;
     let prefix = "";
     let suffix = "";
@@ -321,7 +317,6 @@ const CodeSplitter = () => {
   const handleHighlight = (index, chunk, totalChunks) => {
     setCurrentChunkIndex(index);
     setHighlightedChunks([index]);
-    setCurrentChunkData({ index, chunk, totalChunks });
   };
 
   const handleSearch = () => {
@@ -330,7 +325,6 @@ const CodeSplitter = () => {
         .map((chunk, index) => (chunk.includes(searchTerm) ? index : -1))
         .filter((index) => index !== -1);
       setHighlightedChunks(highlighted);
-      console.log("highlighted", highlighted);
     } else {
       setHighlightedChunks([]);
     }
@@ -345,8 +339,6 @@ const CodeSplitter = () => {
   //     }
   //     setChunks(sortedChunks);
   //   };
-
-  console.log("currentChunkIndex", currentChunkIndex);
 
   const handleSaveConfig = () => {
     const config = {
@@ -445,7 +437,13 @@ const CodeSplitter = () => {
         >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p>Drop The Files Here ...</p>
+            <p>
+              <FontAwesomeIcon
+                icon={faFileUpload}
+                style={{ marginRight: "5px" }}
+              />
+              Drop The Files Here
+            </p>
           ) : (
             <p>
               {" "}
@@ -605,7 +603,7 @@ const CodeSplitter = () => {
                   <p>{chunk}</p>
                   <div className="bottom">
                     <div className="flex">
-                      <p className="allInOne">Chunk No. : {index}</p>
+                      <p className="allInOne">Chunk No. : {index + 1}</p>
                       <p className="allInOne">Chunk Size : {chunk.length}</p>
                     </div>
                     <div>
@@ -665,7 +663,7 @@ const CodeSplitter = () => {
 
                   <div className="bottom">
                     <div className="flex">
-                      <p className="allInOne">Chunk No. : {index}</p>
+                      <p className="allInOne">Chunk No. : {index + 1}</p>
                       <p className="allInOne">Chunk Size : {chunk.length}</p>
                     </div>
                     <div>
@@ -684,28 +682,44 @@ const CodeSplitter = () => {
               ))}
             </div>
           )}
-          <div className="footer-buttons">
-            <button
-              onClick={() => {
-                setCurrentChunkIndex(currentChunkIndex - 1);
-                setHighlightedChunks([currentChunkIndex - 1]);
-              }}
-              disabled={currentChunkIndex === 0}
-            >
-              Previous Chunk
-            </button>
-            <button
-              onClick={() => {
-                setCurrentChunkIndex(currentChunkIndex + 1);
-                setHighlightedChunks([currentChunkIndex + 1]);
-              }}
-              disabled={currentChunkIndex === chunks.length - 1}
-            >
-              Next Chunk
-            </button>
-            <button onClick={() => handleCopyChunk()}>Copy</button>{" "}
+          <div className="footer-buttons-container">
+            <div className="footer-buttons">
+              <button
+                onClick={() => {
+                  setCurrentChunkIndex(currentChunkIndex - 1);
+                  setHighlightedChunks([currentChunkIndex - 1]);
+                }}
+                disabled={currentChunkIndex === 0}
+              >
+                Previous Chunk
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentChunkIndex(currentChunkIndex + 1);
+                  setHighlightedChunks([currentChunkIndex + 1]);
+                }}
+                disabled={currentChunkIndex === chunks.length - 1}
+              >
+                Next Chunk
+              </button>
+
+              {/* <button onClick={() => handleCopyChunk()}>
+                Copy Chunk {currentChunkIndex + 1}{" "}
+              </button> */}
+              <button
+                onClick={() =>
+                  handleCopyChunk(
+                    chunks[currentChunkIndex],
+                    currentChunkIndex,
+                    chunks.length
+                  )
+                }
+              >
+                Copy Chunk {currentChunkIndex + 1}
+              </button>
+            </div>
           </div>
-          {copyStatus && <p className="copy-status">{copyStatus}</p>}{" "}
+          {/* {copyStatus && <p className="copy-status">{copyStatus}</p>}{" "} */}
           {showButton && (
             <button className="scroll-to-top" onClick={scrollToTop}>
               <FontAwesomeIcon icon={faArrowUp} />
