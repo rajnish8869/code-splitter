@@ -281,7 +281,7 @@ button.copied {
 
 .ToggleCopyDownload {
   display: flex;
-  margin: 10px 0 20px 0;
+  margin: 20px 0 10px 0;
   background-color: #384a5f;
   z-index: 1000;
   padding: 10px;
@@ -391,57 +391,9 @@ button {
 }
 
 /* Responsive Styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
   .container {
-    max-width: 100%;
-    margin: 10px;
-    padding: 10px;
-  }
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  .dropzone,
-  .FileSelect {
-    width: 100%;
-    margin: 5px 0;
-  }
-
-  .grid-view .chunk {
-    width: 100%;
-    margin: 5px 0;
-    height: auto;
-  }
-
-  .searchButton {
-    position: static;
-    margin: 10px 0;
-  }
-
-  .footer-buttons-container {
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-  }
-
-  .footer-buttons,
-  .split-text-buttons,
-  .Configuration,
-  .ToggleCopyDownload,
-  .custom-radio {
-    width: 100%;
-    margin: 5px 0;
-    padding: 5px;
-  }
-
-  .faCog-container {
-    right: 5px;
-    top: 5px;
-  }
-
-  .scroll-to-top {
-    bottom: 20px;
-    right: 20px;
+    min-height: calc(100vh - 40px);
+    margin: 0px;
   }
 }

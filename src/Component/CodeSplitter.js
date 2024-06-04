@@ -60,6 +60,7 @@ const CodeSplitter = () => {
       });
     }
   }, [currentChunkIndex]);
+
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
@@ -333,7 +334,9 @@ const CodeSplitter = () => {
     document.body.removeChild(element);
   };
 
-  const handleHighlight = (index, chunk, totalChunks) => {
+  const handleHighlight = (index) => {
+    console.log("🚀 ~ handleHighlight ~ index:", index);
+
     setCurrentChunkIndex(index);
     setHighlightedChunks([index]);
   };
@@ -427,6 +430,8 @@ const CodeSplitter = () => {
     newCopiedState[index] = true;
     setCopiedState(newCopiedState);
   };
+
+  console.log("currentChunkIndex", currentChunkIndex);
 
   return (
     <div className="container">
@@ -565,8 +570,15 @@ const CodeSplitter = () => {
         </button>
       </div> */}
       {showContent ? (
-        <div ref={divRef}>
-          <div className="searchContainer">
+        <div>
+          <div className="ToggleCopyDownload">
+            <button onClick={toggleView}>Toggle View</button>
+            <div>
+              <button onClick={handleBatchCopy}>Copy All Chunks</button>
+              <button onClick={handleBatchDownload}>Download All Chunks</button>
+            </div>
+          </div>
+          <div className="searchContainer" ref={divRef}>
             <input
               type="text"
               value={searchTerm}
@@ -576,13 +588,6 @@ const CodeSplitter = () => {
             <button onClick={handleSearch} className="searchButton">
               Search
             </button>
-          </div>
-          <div className="ToggleCopyDownload">
-            <button onClick={toggleView}>Toggle View</button>
-            <div>
-              <button onClick={handleBatchCopy}>Copy All Chunks</button>
-              <button onClick={handleBatchDownload}>Download All Chunks</button>
-            </div>
           </div>
           {view === "list" ? (
             <div className="list-view">
@@ -650,13 +655,9 @@ const CodeSplitter = () => {
                     <div>
                       <button
                         className={`
-                         ${
-                           highlightedChunks.includes(index)
-                             ? "HighlightedBackgroundColor"
-                             : ""
-                         }
-                         ${copiedState[index] ? "copied" : ""}
-                       `}
+    ${highlightedChunks.includes(index) ? "HighlightedBackgroundColor" : ""}
+    ${copiedState[index] ? "copied" : ""}
+  `}
                         onClick={() => handleCopy(chunk, index, chunks.length)}
                       >
                         {copiedState[index] ? "Copied" : "Copy"}
@@ -714,7 +715,7 @@ const CodeSplitter = () => {
                   className={`chunk ${
                     highlightedChunks.includes(index) ? "highlighted" : ""
                   }`}
-                  onClick={() => handleHighlight(chunk, index, chunks.length)}
+                  onClick={() => handleHighlight(index, chunk, chunks.length)}
                   ref={(el) => (boxRefs.current[index] = el)}
                 >
                   <div
