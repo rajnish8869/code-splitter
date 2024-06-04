@@ -11,6 +11,7 @@ import {
   faTimes,
   faArrowUp,
   faFileUpload,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 
 const CodeSplitter = () => {
@@ -29,7 +30,14 @@ const CodeSplitter = () => {
   const [isConfigVisible, setIsConfigVisible] = useState(false);
   const configRef = useRef(null);
   const boxRefs = useRef([]);
+  const divRef = useRef(null);
   const [showButton, setShowButton] = useState(false);
+
+  const handleScrollToTop = () => {
+    if (divRef.current) {
+      divRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,7 +99,7 @@ const CodeSplitter = () => {
     for (let i = 0; i < text.length; i += size) {
       result.push(text.slice(i, i + size));
     }
-
+    setTimeout(handleScrollToTop, 500);
     return result.filter(Boolean);
   };
 
@@ -101,6 +109,7 @@ const CodeSplitter = () => {
     for (let i = 0; i < words.length; i += size) {
       result.push(words.slice(i, i + size).join(" "));
     }
+    setTimeout(handleScrollToTop, 500);
     return result.filter(Boolean);
   };
 
@@ -109,6 +118,7 @@ const CodeSplitter = () => {
     if (delimiter) {
       result.push(...text.split(delimiter));
     }
+    setTimeout(handleScrollToTop, 500);
     return result.filter(Boolean);
   };
 
@@ -291,8 +301,17 @@ const CodeSplitter = () => {
 
   const handleClear = () => {
     setText("");
-    setChunks([]);
+    setChunkSize(1000);
+    setCustomDelimiter("");
+    setSplitByWords(false);
+    setSearchTerm("");
+    setHighlightedChunks([]);
+    setCurrentChunkIndex(0);
+    setCopiedState([]);
     setCopyStatus("");
+    setSelectedOption("option1");
+    setShowContent(false);
+    setIsConfigVisible(false);
   };
 
   const handleDownload = (chunk, index) => {
@@ -365,8 +384,14 @@ const CodeSplitter = () => {
     setChunkSize(1000);
     setCustomDelimiter("");
     setSplitByWords(false);
+    setSearchTerm("");
+    setHighlightedChunks([]);
+    setCurrentChunkIndex(0);
+    setCopiedState([]);
+    setCopyStatus("");
+    setSelectedOption("option1");
     setShowContent(false);
-    handleToggleConfig();
+    setIsConfigVisible(false);
   };
 
   const toggleView = () => {
@@ -540,7 +565,7 @@ const CodeSplitter = () => {
         </button>
       </div> */}
       {showContent ? (
-        <div>
+        <div ref={divRef}>
           <div className="searchContainer">
             <input
               type="text"
@@ -603,17 +628,46 @@ const CodeSplitter = () => {
                   <p>{chunk}</p>
                   <div className="bottom">
                     <div className="flex">
-                      <p className="allInOne">Chunk No. : {index + 1}</p>
-                      <p className="allInOne">Chunk Size : {chunk.length}</p>
+                      <p
+                        className={
+                          highlightedChunks.includes(index)
+                            ? "allInOneHighlighted"
+                            : "allInOne"
+                        }
+                      >
+                        Chunk No. : {index + 1}
+                      </p>
+                      <p
+                        className={
+                          highlightedChunks.includes(index)
+                            ? "allInOneHighlighted"
+                            : "allInOne"
+                        }
+                      >
+                        Chunk Size : {chunk.length}
+                      </p>
                     </div>
                     <div>
                       <button
-                        className={copiedState[index] ? "copied" : ""}
+                        className={`
+                         ${
+                           highlightedChunks.includes(index)
+                             ? "HighlightedBackgroundColor"
+                             : ""
+                         }
+                         ${copiedState[index] ? "copied" : ""}
+                       `}
                         onClick={() => handleCopy(chunk, index, chunks.length)}
                       >
                         {copiedState[index] ? "Copied" : "Copy"}
                       </button>
-                      <button onClick={() => handleDownload(chunk, index)}>
+                      <button
+                        className={`
+    ${highlightedChunks.includes(index) ? "HighlightedBackgroundColor" : ""}
+    ${copiedState[index] ? "copied" : ""}
+  `}
+                        onClick={() => handleDownload(chunk, index)}
+                      >
                         Download
                       </button>
                     </div>
@@ -632,7 +686,13 @@ const CodeSplitter = () => {
                   }}
                 >
                   {" "}
-                  <div style={{ height: "248px", overflowY: "auto" }}>
+                  <div
+                    style={{
+                      height: "248px",
+                      overflowY: "auto",
+                      wordBreak: "break-word",
+                    }}
+                  >
                     {content}
                   </div>
                   <div className="bottom">
@@ -657,24 +717,55 @@ const CodeSplitter = () => {
                   onClick={() => handleHighlight(chunk, index, chunks.length)}
                   ref={(el) => (boxRefs.current[index] = el)}
                 >
-                  <div style={{ height: "248px", overflowY: "auto" }}>
+                  <div
+                    style={{
+                      height: "248px",
+                      overflowY: "auto",
+                      wordBreak: "break-word",
+                    }}
+                  >
                     <p>{chunk}</p>
                   </div>
 
                   <div className="bottom">
                     <div className="flex">
-                      <p className="allInOne">Chunk No. : {index + 1}</p>
-                      <p className="allInOne">Chunk Size : {chunk.length}</p>
+                      <p
+                        className={
+                          highlightedChunks.includes(index)
+                            ? "allInOneHighlighted"
+                            : "allInOne"
+                        }
+                      >
+                        Chunk No. : {index + 1}
+                      </p>
+                      <p
+                        className={
+                          highlightedChunks.includes(index)
+                            ? "allInOneHighlighted"
+                            : "allInOne"
+                        }
+                      >
+                        Chunk Size : {chunk.length}
+                      </p>
                     </div>
                     <div>
                       <button
-                        className={copiedState[index] ? "copied" : ""}
+                        className={`
+    ${highlightedChunks.includes(index) ? "HighlightedBackgroundColor" : ""}
+    ${copiedState[index] ? "copied" : ""}
+  `}
                         onClick={() => handleCopy(chunk, index, chunks.length)}
                       >
                         {copiedState[index] ? "Copied" : "Copy"}
-                      </button>{" "}
-                      <button onClick={() => handleDownload(chunk, index)}>
-                        Download
+                      </button>
+                      <button
+                        className={`
+    ${highlightedChunks.includes(index) ? "HighlightedBackgroundColor" : ""}
+    ${copiedState[index] ? "copied" : ""}
+  `}
+                        onClick={() => handleDownload(chunk, index)}
+                      >
+                        <FontAwesomeIcon icon={faDownload} />
                       </button>
                     </div>
                   </div>
@@ -714,8 +805,11 @@ const CodeSplitter = () => {
                     chunks.length
                   )
                 }
+                className={`${copiedState[currentChunkIndex] ? "copied" : ""}`}
               >
-                Copy Chunk {currentChunkIndex + 1}
+                {copiedState[currentChunkIndex]
+                  ? `Chunk ${currentChunkIndex + 1} copied`
+                  : `Copy Chunk ${currentChunkIndex + 1}`}
               </button>
             </div>
           </div>

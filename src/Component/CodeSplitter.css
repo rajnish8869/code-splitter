@@ -8,8 +8,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/*-----*/
-
 /* Title */
 h1 {
   font-size: 2rem;
@@ -17,8 +15,6 @@ h1 {
   color: white;
   margin-top: 0px;
 }
-
-/*-----*/
 
 /* Textarea */
 textarea {
@@ -32,8 +28,6 @@ textarea {
   font-size: 1rem;
   resize: vertical;
 }
-
-/*-----*/
 
 /* Input Fields */
 input[type="number"],
@@ -78,16 +72,13 @@ textarea::placeholder {
   text-align: center;
 }
 
-/*-----*/
-
 /* Buttons */
-
 .searchButton {
   position: absolute;
   right: 0;
   top: 0;
   display: flex;
-  margin: 10.5px 1px 10.5px 0px;
+  margin: 11px 1px 10px 0px;
 }
 
 .searchContainer {
@@ -96,7 +87,7 @@ textarea::placeholder {
 }
 
 button {
-  padding: 10px 20px;
+  padding: 10px 15px;
   margin: 5px;
   border: none;
   border-radius: 5px;
@@ -116,19 +107,15 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/*-----*/
-
 /* Chunk Display */
 .chunk {
-  padding: 15px;
+  padding: 15px 15px 5px 15px;
   border: 1px solid #ced4da;
   border-radius: 8px;
   background-color: #384a5f;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%;
 }
-
-/*-----*/
 
 /* Grid View */
 .grid-view {
@@ -150,7 +137,7 @@ button:disabled {
   border-radius: 8px;
   background-color: #384a5f;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 300px;
+  height: 305px;
   overflow: auto;
   position: relative;
 }
@@ -165,9 +152,8 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: 5px;
 }
-
-/*-----*/
 
 /* Copy Status */
 .copy-status {
@@ -176,10 +162,7 @@ button:disabled {
   margin-top: 10px;
 }
 
-/*-----*/
-
 /* Footer buttons */
-
 .footer-buttons-container {
   position: -webkit-sticky; /* For Safari */
   width: 100%;
@@ -260,11 +243,23 @@ button.copied {
 }
 
 .allInOne {
-  padding: 10px 20px;
+  padding: 10px 10px;
   margin: 5px;
   border: none;
   border-radius: 5px;
   background-color: #121d2a;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  font-family: arial;
+}
+
+.allInOneHighlighted {
+  padding: 10px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #384a5f;
   color: #fff;
   font-size: 1rem;
   transition: background-color 0.3s ease;
@@ -389,4 +384,64 @@ button {
   -moz-user-select: none; /* Disable text selection for Firefox */
   -ms-user-select: none; /* Disable text selection for Internet Explorer/Edge */
   user-select: none; /* Disable text selection */
+}
+
+.HighlightedBackgroundColor {
+  background-color: #384a5f;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    margin: 10px;
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .dropzone,
+  .FileSelect {
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .grid-view .chunk {
+    width: 100%;
+    margin: 5px 0;
+    height: auto;
+  }
+
+  .searchButton {
+    position: static;
+    margin: 10px 0;
+  }
+
+  .footer-buttons-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .footer-buttons,
+  .split-text-buttons,
+  .Configuration,
+  .ToggleCopyDownload,
+  .custom-radio {
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+  }
+
+  .faCog-container {
+    right: 5px;
+    top: 5px;
+  }
+
+  .scroll-to-top {
+    bottom: 20px;
+    right: 20px;
+  }
 }
