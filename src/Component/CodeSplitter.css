@@ -379,7 +379,8 @@ input::-webkit-inner-spin-button {
   transform: scale(0.9);
 }
 
-button {
+button,
+.dropzone {
   -webkit-user-select: none; /* Disable text selection for Safari */
   -moz-user-select: none; /* Disable text selection for Firefox */
   -ms-user-select: none; /* Disable text selection for Internet Explorer/Edge */
